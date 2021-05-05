@@ -1,0 +1,35 @@
+cr::zAltType(...){
+	//Criando variáveis
+	int zflag_cr, zflag_in;
+	string zcreated, zref_num, ztype;
+
+	//Definindo valores
+	zcreated=format(created_via.sym);
+	zref_num=format(ref_num);
+	
+	zflag_in=category.in_flag;
+	zflag_cr=category.cr_flag;
+
+	logf(SIGNIFICANT,"zAltType::Chamado %s - Iniciando script para conversão.", zref_num);
+		
+
+		//Flag in = 0 define Requisição, senão define Incidente
+		if (zflag_cr==1 && zflag_in==0){
+			ztype=format("R");
+			send_wait(0, this, "call_attr", "type", "set_val", ztype, "SURE_SET");
+			if(msg_error()){
+				logf(ERROR,"zAltType::Chamado %s - Erro durante send_wait.", zref_num);
+				return ;
+			}
+			logf(SIGNIFICANT,"zAltType::Chamado %s - Definido como Requisição.", zref_num);
+		}else{
+			ztype=format("I");
+			send_wait(0, this, "call_attr", "type", "set_val", ztype, "SURE_SET");
+			if(msg_error()){
+				logf(ERROR,"zAltType::Chamado %s - Erro durante send_wait.", zref_num);
+				return ;
+			}
+			logf(SIGNIFICANT,"zAltType::Chamado %s - Definido como Incidente.", zref_num);
+		}
+	
+}
