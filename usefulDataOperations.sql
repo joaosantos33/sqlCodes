@@ -54,3 +54,13 @@ ELSE IF @agendamento = 2 -- mes atual
 		SET @dt_ini_convertido = DATEDIFF(second,'1969-12-31 21:00:00',CONVERT(VARCHAR,YEAR(getdate())) +'-' + CONVERT(VARCHAR,MONTH(getdate())) + '-1 00:00:00')
 		SET @dt_fim_convertido = DATEDIFF(second,'1969-12-31 21:00:00',GETDATE())
 	END
+	
+dbo.z_retorna_tempo_util_parametros(
+                           dateadd(ss, inc.open_date, '1969-12-31 21:00:00'),
+                           dateadd(ss, (select top 1 cv.z_dat_Inicio
+                                        from z_ciclo_vida cv
+                                        where cv.z_srl_CallReq = inc.persid
+                                          and cv.z_srl_Status = 'WIP'
+                                        order by cv.id), '1969-12-31 21:00:00'),
+                           '09:00', '18:00', 0
+                       )
